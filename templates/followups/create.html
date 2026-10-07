@@ -1,0 +1,68 @@
+{% extends 'layout/base.html' %}
+{% block header_title %}Schedule Follow-Up Activity{% endblock %}
+
+{% block content %}
+<div class="card card-custom" style="max-width: 700px; margin: 0 auto;">
+    <div class="card-header">
+        <span><i class="fa-solid fa-calendar-plus me-2 text-warning"></i>New Follow-Up Activity</span>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('followup.create') }}" method="POST" class="needs-validation" novalidate>
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label class="form-label text-gray-300 small fw-semibold">Subject / Agenda *</label>
+                    <input type="text" name="subject" class="form-control bg-dark border-secondary text-white" placeholder="Product Demo & Contract Discussion" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Activity Type *</label>
+                    <select name="followup_type" class="form-select bg-dark border-secondary text-white">
+                        <option value="Call">Phone Call</option>
+                        <option value="Meeting">In-Person / Online Meeting</option>
+                        <option value="Email">Email Follow-Up</option>
+                        <option value="Task">Task / Action Item</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Date & Time *</label>
+                    <input type="datetime-local" name="followup_date" class="form-control bg-dark border-secondary text-white" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Related Customer</label>
+                    <select name="customer_id" class="form-select bg-dark border-secondary text-white">
+                        <option value="">None (Select Customer...)</option>
+                        {% for c in customers %}
+                        <option value="{{ c.id }}" {% if request.args.get('customer_id')|int == c.id %}selected{% endif %}>{{ c.customer_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Related Lead</label>
+                    <select name="lead_id" class="form-select bg-dark border-secondary text-white">
+                        <option value="">None (Select Lead...)</option>
+                        {% for l in leads %}
+                        <option value="{{ l.id }}">{{ l.lead_name }} ({{ l.company_name or 'N/A' }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label text-gray-300 small fw-semibold">Assigned User</label>
+                    <select name="assigned_to" class="form-select bg-dark border-secondary text-white">
+                        {% for u in sales_execs %}
+                        <option value="{{ u.id }}" {% if u.id == session.get('user_id') %}selected{% endif %}>{{ u.name }} ({{ u.role.role_name }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label text-gray-300 small fw-semibold">Remarks / Notes</label>
+                    <textarea name="remarks" class="form-control bg-dark border-secondary text-white" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-4 text-end">
+                <a href="{{ url_for('followup.index') }}" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-primary-custom"><i class="fa-solid fa-save me-1"></i> Schedule Follow-Up</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

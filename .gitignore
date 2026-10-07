@@ -1,0 +1,18 @@
+# Python & Flask ignorable files
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+instance/
+.pytest_cache/
+
+# Database files
+*.db
+*.sqlite3
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

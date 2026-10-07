@@ -1,0 +1,84 @@
+{% extends 'layout/base.html' %}
+{% block header_title %}Follow-Up Activities{% endblock %}
+
+{% block content %}
+<div class="card card-custom">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="fa-solid fa-calendar-check me-2 text-warning"></i>Follow-Up Schedule</span>
+        <a href="{{ url_for('followup.create') }}" class="btn btn-primary-custom btn-sm">
+            <i class="fa-solid fa-plus me-1"></i> Schedule Follow-Up
+        </a>
+    </div>
+    <div class="card-body">
+        <form method="GET" class="row g-2 mb-3">
+            <div class="col-md-4">
+                <select name="status" class="form-select bg-dark border-secondary text-white">
+                    <option value="">All Statuses</option>
+                    <option value="Planned" {% if status_filter == 'Planned' %}selected{% endif %}>Planned</option>
+                    <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Completed</option>
+                    <option value="Missed" {% if status_filter == 'Missed' %}selected{% endif %}>Missed</option>
+                    <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-secondary me-2"><i class="fa-solid fa-filter me-1"></i> Filter</button>
+                <a href="{{ url_for('followup.index') }}" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Type</th>
+                        <th>Scheduled Date</th>
+                        <th>Customer / Lead</th>
+                        <th>Assigned To</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in followups %}
+                    <tr>
+                        <td class="fw-semibold text-white">{{ f.subject }}</td>
+                        <td><span class="badge bg-secondary">{{ f.followup_type }}</span></td>
+                        <td>
+                            <span class="{% if f.status == 'Planned' and f.followup_date < today %}text-danger fw-bold{% endif %}">
+                                {{ f.followup_date.strftime('%Y-%m-%d %H:%M') }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if f.customer %}
+                                <span class="badge bg-info text-dark"><i class="fa-solid fa-building me-1"></i>{{ f.customer.customer_name }}</span>
+                            {% elif f.lead %}
+                                <span class="badge bg-primary"><i class="fa-solid fa-user me-1"></i>{{ f.lead.lead_name }}</span>
+                            {% else %}-{% endif %}
+                        </td>
+                        <td>{{ f.assigned_user.name if f.assigned_user else 'Unassigned' }}</td>
+                        <td>
+                            <span class="badge {% if f.status == 'Completed' %}bg-success{% elif f.status == 'Planned' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                                {{ f.status }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if f.status == 'Planned' %}
+                            <form action="{{ url_for('followup.update_status', id=f.id) }}" method="POST" class="d-inline">
+                                <input type="hidden" name="status" value="Completed">
+                                <button type="submit" class="btn btn-sm btn-success"><i class="fa-solid fa-check me-1"></i> Mark Done</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No follow-ups scheduled.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

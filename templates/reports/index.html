@@ -1,0 +1,62 @@
+{% extends 'layout/base.html' %}
+{% block header_title %}Analytics & Executive Reports{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4">
+    <!-- METRIC 1: CONVERSION RATE -->
+    <div class="col-md-4">
+        <div class="kpi-card border-start border-4 border-success">
+            <div class="kpi-title">Lead Conversion Rate</div>
+            <div class="kpi-value text-success">{{ metrics.conversion_rate }}%</div>
+            <div class="small text-muted mt-1">{{ metrics.converted_leads }} Converted out of {{ metrics.total_leads }} Leads</div>
+        </div>
+    </div>
+    <!-- METRIC 2: FOLLOW-UP EFFICIENCY -->
+    <div class="col-md-4">
+        <div class="kpi-card border-start border-4 border-info">
+            <div class="kpi-title">Completed Follow-Ups</div>
+            <div class="kpi-value text-info">{{ metrics.completed_followups }}</div>
+            <div class="small text-muted mt-1">{{ metrics.planned_followups }} Planned activities remaining</div>
+        </div>
+    </div>
+    <!-- METRIC 3: LOST LEADS -->
+    <div class="col-md-4">
+        <div class="kpi-card border-start border-4 border-danger">
+            <div class="kpi-title">Unqualified / Lost Leads</div>
+            <div class="kpi-value text-danger">{{ metrics.lost_leads }}</div>
+            <div class="small text-muted mt-1">Closed without conversion</div>
+        </div>
+    </div>
+</div>
+
+<!-- STAGE-WISE PIPELINE REPORT -->
+<div class="card card-custom">
+    <div class="card-header">
+        <span><i class="fa-solid fa-chart-pie me-2 text-indigo-400"></i>Stage-Wise Pipeline Report</span>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Pipeline Stage</th>
+                        <th>Opportunities Count</th>
+                        <th>Total Pipeline Value ($)</th>
+                        <th>Weighted Expected Value ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in pipeline_report %}
+                    <tr>
+                        <td class="fw-semibold text-white">{{ r.stage }}</td>
+                        <td><span class="badge bg-secondary">{{ r.count }}</span></td>
+                        <td class="text-success fw-bold">${{ "{:,.2f}".format(r.total_value) }}</td>
+                        <td class="text-info">${{ "{:,.2f}".format(r.weighted_value) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

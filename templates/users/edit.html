@@ -1,0 +1,43 @@
+{% extends 'layout/base.html' %}
+{% block header_title %}Edit User Account{% endblock %}
+
+{% block content %}
+<div class="card card-custom" style="max-width: 650px; margin: 0 auto;">
+    <div class="card-header">
+        <span><i class="fa-solid fa-pen me-2 text-warning"></i>Modify User Settings</span>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('user.edit', id=user.id) }}" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label class="form-label text-gray-300 small fw-semibold">Full Name *</label>
+                <input type="text" name="name" class="form-control bg-dark border-secondary text-white" value="{{ user.name }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-gray-300 small fw-semibold">Email Address *</label>
+                <input type="email" name="email" class="form-control bg-dark border-secondary text-white" value="{{ user.email }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-gray-300 small fw-semibold">New Password (leave blank to keep current)</label>
+                <input type="password" name="new_password" class="form-control bg-dark border-secondary text-white" placeholder="••••••••">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-gray-300 small fw-semibold">Primary Role *</label>
+                <select name="role_id" class="form-select bg-dark border-secondary text-white" required>
+                    {% for r in roles %}
+                    <option value="{{ r.id }}" {% if r.id == user.role_id %}selected{% endif %}>{{ r.role_name }} - {{ r.description }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3 form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="is_active" id="isActive" {% if user.is_active %}checked{% endif %}>
+                <label class="form-check-input-label text-white" for="isActive">Account Active</label>
+            </div>
+
+            <div class="mt-4 text-end">
+                <a href="{{ url_for('user.index') }}" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-warning"><i class="fa-solid fa-save me-1"></i> Update User</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

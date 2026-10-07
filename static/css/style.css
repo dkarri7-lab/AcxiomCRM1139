@@ -1,0 +1,209 @@
+/* AcxiomCRM Custom Stylesheet - Premium Dark/Light Aesthetic */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary-color: #06b6d4;
+    --bg-dark: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+    --sidebar-width: 250px;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #0b0f19;
+    color: #e2e8f0;
+    min-height: 100vh;
+}
+
+/* Sidebar Styling */
+#sidebar {
+    width: var(--sidebar-width);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    background: #111827;
+    border-right: 1px solid #1f2937;
+    padding-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+#sidebar .brand-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #6366f1;
+    letter-spacing: 0.5px;
+    padding: 0.5rem 1.25rem 1.5rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid #1f2937;
+    margin-bottom: 1rem;
+}
+
+#sidebar .nav-link {
+    color: #9ca3af;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 0.5rem;
+    margin: 0.2rem 0.75rem;
+    transition: all 0.2s;
+}
+
+#sidebar .nav-link:hover, #sidebar .nav-link.active {
+    color: #ffffff;
+    background: rgba(99, 102, 241, 0.15);
+    border-left: 3px solid #6366f1;
+}
+
+/* Main Content Area */
+#main-wrapper {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-navbar {
+    background: #111827;
+    border-bottom: 1px solid #1f2937;
+    padding: 0.8rem 1.5rem;
+}
+
+.main-content {
+    padding: 1.75rem;
+    flex: 1;
+}
+
+/* Premium Card Component */
+.card-custom {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    color: #f3f4f6;
+    margin-bottom: 1.5rem;
+}
+
+.card-custom .card-header {
+    background: #111827;
+    border-bottom: 1px solid #374151;
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem 0.75rem 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* KPI Metric Cards */
+.kpi-card {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid #374151;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+}
+
+.kpi-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.kpi-value {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 0.25rem;
+}
+
+.kpi-icon {
+    position: absolute;
+    right: 1.25rem;
+    top: 1.25rem;
+    font-size: 2.2rem;
+    opacity: 0.25;
+}
+
+/* Table Styling */
+.table-custom {
+    color: #e5e7eb;
+    margin-bottom: 0;
+}
+
+.table-custom th {
+    background: #111827;
+    color: #9ca3af;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #374151;
+    padding: 0.85rem 1rem;
+}
+
+.table-custom td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #374151;
+    vertical-align: middle;
+}
+
+.table-custom tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Status Badges */
+.badge-status {
+    padding: 0.35em 0.75em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.375rem;
+}
+
+.badge-new { background: #3b82f6; color: #fff; }
+.badge-contacted { background: #8b5cf6; color: #fff; }
+.badge-qualified { background: #10b981; color: #fff; }
+.badge-unqualified { background: #6b7280; color: #fff; }
+.badge-converted { background: #059669; color: #fff; }
+.badge-lost { background: #ef4444; color: #fff; }
+.badge-won { background: #10b981; color: #fff; }
+
+/* Buttons */
+.btn-primary-custom {
+    background-color: #6366f1;
+    border-color: #6366f1;
+    color: #ffffff;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1.25rem;
+}
+
+.btn-primary-custom:hover {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+    color: #ffffff;
+}
+
+/* Responsive adjust */
+@media (max-width: 768px) {
+    #sidebar { margin-left: -250px; }
+    #sidebar.active { margin-left: 0; }
+    #main-wrapper { margin-left: 0; }
+}

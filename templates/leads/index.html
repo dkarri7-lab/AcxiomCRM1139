@@ -1,0 +1,89 @@
+{% extends 'layout/base.html' %}
+{% block header_title %}Lead Lifecycle Management{% endblock %}
+
+{% block content %}
+<div class="card card-custom">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="fa-solid fa-user-plus me-2 text-primary"></i>Prospective Lead Pipeline</span>
+        <a href="{{ url_for('lead.create') }}" class="btn btn-primary-custom btn-sm">
+            <i class="fa-solid fa-plus me-1"></i> Capture Lead
+        </a>
+    </div>
+    <div class="card-body">
+        <!-- SEARCH & FILTER -->
+        <form method="GET" class="row g-2 mb-3">
+            <div class="col-md-5">
+                <input type="text" name="search" class="form-control bg-dark border-secondary text-white" placeholder="Search lead name, company..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select bg-dark border-secondary text-white">
+                    <option value="">All Lead Statuses</option>
+                    <option value="New" {% if status_filter == 'New' %}selected{% endif %}>New</option>
+                    <option value="Contacted" {% if status_filter == 'Contacted' %}selected{% endif %}>Contacted</option>
+                    <option value="Qualified" {% if status_filter == 'Qualified' %}selected{% endif %}>Qualified</option>
+                    <option value="Unqualified" {% if status_filter == 'Unqualified' %}selected{% endif %}>Unqualified</option>
+                    <option value="Converted" {% if status_filter == 'Converted' %}selected{% endif %}>Converted</option>
+                    <option value="Lost" {% if status_filter == 'Lost' %}selected{% endif %}>Lost</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-secondary me-2"><i class="fa-solid fa-filter me-1"></i> Filter</button>
+                <a href="{{ url_for('lead.index') }}" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Lead Code</th>
+                        <th>Lead Name</th>
+                        <th>Company</th>
+                        <th>Source</th>
+                        <th>Status</th>
+                        <th>Expected Value</th>
+                        <th>Owner</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in leads %}
+                    <tr>
+                        <td><span class="badge bg-dark text-primary border border-primary">{{ l.lead_code }}</span></td>
+                        <td class="fw-semibold text-white">{{ l.lead_name }}</td>
+                        <td>{{ l.company_name or '-' }}</td>
+                        <td><span class="badge bg-secondary">{{ l.source }}</span></td>
+                        <td>
+                            <span class="badge-status 
+                                {% if l.status == 'New' %}badge-new
+                                {% elif l.status == 'Contacted' %}badge-contacted
+                                {% elif l.status == 'Qualified' %}badge-qualified
+                                {% elif l.status == 'Converted' %}badge-converted
+                                {% else %}badge-lost{% endif %}">
+                                {{ l.status }}
+                            </span>
+                        </td>
+                        <td class="text-success fw-bold">${{ "{:,.2f}".format(l.expected_value) }}</td>
+                        <td>{{ l.owner.name if l.owner else 'Unassigned' }}</td>
+                        <td>
+                            <a href="{{ url_for('lead.edit', id=l.id) }}" class="btn btn-sm btn-warning text-dark me-1" title="Edit Lead">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            {% if l.status in ['Qualified', 'Contacted', 'New'] %}
+                            <a href="{{ url_for('lead.convert', id=l.id) }}" class="btn btn-sm btn-success me-1" title="Convert to Customer & Opportunity">
+                                <i class="fa-solid fa-right-left me-1"></i> Convert
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">No prospective leads found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'layout/base.html' %}
+{% block header_title %}Capture New Prospect Lead{% endblock %}
+
+{% block content %}
+<div class="card card-custom" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-header">
+        <span><i class="fa-solid fa-user-plus me-2 text-primary"></i>Lead Details</span>
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('lead.create') }}" method="POST" class="needs-validation" novalidate>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Lead Name *</label>
+                    <input type="text" name="lead_name" class="form-control bg-dark border-secondary text-white" placeholder="Jane Smith" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Company Name</label>
+                    <input type="text" name="company_name" class="form-control bg-dark border-secondary text-white" placeholder="Apex Logistics">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Email Address *</label>
+                    <input type="email" name="email" class="form-control bg-dark border-secondary text-white" placeholder="jane@apex.com" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-gray-300 small fw-semibold">Phone Number *</label>
+                    <input type="text" name="phone" class="form-control bg-dark border-secondary text-white" placeholder="9876543210" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-gray-300 small fw-semibold">Lead Source</label>
+                    <select name="source" class="form-select bg-dark border-secondary text-white">
+                        <option value="Web">Website / Landing Page</option>
+                        <option value="Referral">Referral</option>
+                        <option value="Campaign">Marketing Campaign</option>
+                        <option value="Cold Call">Cold Outreach</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-gray-300 small fw-semibold">Lead Status</label>
+                    <select name="status" class="form-select bg-dark border-secondary text-white">
+                        <option value="New">New</option>
+                        <option value="Contacted">Contacted</option>
+                        <option value="Qualified">Qualified</option>
+                        <option value="Unqualified">Unqualified</option>
+                        <option value="Lost">Lost</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-gray-300 small fw-semibold">Expected Deal Value ($)</label>
+                    <input type="number" step="0.01" min="0" name="expected_value" class="form-control bg-dark border-secondary text-white" value="5000.00">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label text-gray-300 small fw-semibold">Assigned Sales Executive</label>
+                    <select name="owner_id" class="form-select bg-dark border-secondary text-white">
+                        {% for u in sales_execs %}
+                        <option value="{{ u.id }}" {% if u.id == session.get('user_id') %}selected{% endif %}>{{ u.name }} ({{ u.role.role_name }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4 text-end">
+                <a href="{{ url_for('lead.index') }}" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-primary-custom"><i class="fa-solid fa-save me-1"></i> Save Lead</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

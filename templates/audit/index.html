@@ -1,0 +1,70 @@
+{% extends 'layout/base.html' %}
+{% block header_title %}Security & Business Audit Logs{% endblock %}
+
+{% block content %}
+<div class="card card-custom">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="fa-solid fa-shield-halved me-2 text-danger"></i>Audit Trail History</span>
+        <span class="badge bg-dark text-muted border border-secondary">Append-Only Immutable Records</span>
+    </div>
+    <div class="card-body">
+        <form method="GET" class="row g-2 mb-3">
+            <div class="col-md-3">
+                <select name="user_id" class="form-select bg-dark border-secondary text-white">
+                    <option value="">All Users</option>
+                    {% for u in users %}
+                    <option value="{{ u.id }}" {% if user_filter|int == u.id %}selected{% endif %}>{{ u.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="entity" class="form-control bg-dark border-secondary text-white" placeholder="Entity (User, Customer, Lead...)" value="{{ entity_filter }}">
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="action" class="form-control bg-dark border-secondary text-white" placeholder="Action (Login, Create, Update...)" value="{{ action_filter }}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-secondary me-2"><i class="fa-solid fa-filter me-1"></i> Filter</button>
+                <a href="{{ url_for('audit.index') }}" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-custom">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Entity</th>
+                        <th>Record ID</th>
+                        <th>Details / Audit Change</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in audit_logs %}
+                    <tr>
+                        <td><small class="text-muted">{{ a.created_date.strftime('%Y-%m-%d %H:%M:%S') }}</small></td>
+                        <td class="fw-semibold">{{ a.user.name if a.user else 'System / Anonymous' }}</td>
+                        <td>
+                            <span class="badge {% if 'Failure' in a.action or 'Locked' in a.action %}bg-danger{% elif 'Create' in a.action %}bg-success{% elif 'Update' in a.action %}bg-warning text-dark{% else %}bg-info text-dark{% endif %}">
+                                {{ a.action }}
+                            </span>
+                        </td>
+                        <td>{{ a.entity_name or '-' }}</td>
+                        <td>{{ a.record_id or '-' }}</td>
+                        <td><small class="text-gray-300">{{ a.new_value or a.old_value or '-' }}</small></td>
+                        <td><small class="text-muted">{{ a.ip_address }}</small></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No audit log records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
